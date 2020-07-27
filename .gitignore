@@ -1,0 +1,9 @@
+#paths
+bin
+obj
+config
+**/packages/*
+.vs
+target
+test-output
+
