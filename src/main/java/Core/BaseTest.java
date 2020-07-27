@@ -1,4 +1,4 @@
-package main.java.Core;
+package Core;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -27,7 +27,8 @@ public class BaseTest {
 	@BeforeMethod
 	public void beforeMethod(Method method ) throws IOException {
 		String methodName = method.getName();
-		ExcelUtility.prepareteTeastcaseData(methodName);		
+		ExcelUtility.prepareteTeastcaseData(methodName);	
+		ExcelUtility.printData();
 		initializeDriver();
 	}
 	

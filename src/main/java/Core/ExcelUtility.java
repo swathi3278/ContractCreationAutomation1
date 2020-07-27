@@ -1,4 +1,4 @@
-package main.java.Core;
+package Core;
 
 
 import java.io.File;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,9 +25,12 @@ public class ExcelUtility {
 	public static XSSFSheet sheet ;
 	static HashMap<Integer, String> hmColumns;
 	static FileInputStream fis;
+	public static int startRow = 0;
+	public static int endRow = 0;
+	public static int rowCount = 0;
 	
 	public static void loadTestData() throws IOException {		
-		File file = new File("C:\\Users\\kondu\\OneDrive\\Desktop\\Subscriber\\TestData.xlsx"); 
+		File file = new File("C:\\Users\\kondu\\OneDrive\\Desktop\\Subscriber\\TestData1.xlsx"); 
 		 fis = new FileInputStream(file); 															
 		 wb = new XSSFWorkbook(fis);
 		sheet = wb.getSheet("Enterprise");	
@@ -45,13 +49,15 @@ public class ExcelUtility {
 		wb.close();
 	}
 	
-	public static void updateResult(int row, boolean result) {
+	public static void updateResult(int row, boolean result, String reason) {
 		 Cell cell = sheet.getRow(row).getCell(19);
+		 //Cell failedCell = sheet.getRow(row).getCell(20);
 		if(result) {		
 		 cell.setCellValue("PASS");
 		}
 		else {
 			 cell.setCellValue("FAIL");
+			 //failedCell.setCellValue(reason);
 		}
 	}
 	
@@ -70,6 +76,7 @@ public class ExcelUtility {
 		boolean isNewRecord = false;
 		
 		try {
+			int rowNumber =0;
 			for(Row eachRow : sheet) {
 				if(isFirstRow) {
 					isFirstRow = false;
@@ -84,9 +91,11 @@ public class ExcelUtility {
 									String test = eachRow.getCell(col).getStringCellValue();
 									if(test.equalsIgnoreCase(testName)) {
 										//if studyname is found
+										startRow = rowNumber;
 										isTestExist = true;
-									} else if(isTestExist){								
-									
+									} else if(isTestExist){	
+										rowCount --;
+										endRow = rowNumber;
 										isTestExist = false;
 										return;
 									}
@@ -124,8 +133,10 @@ public class ExcelUtility {
 					}
 					
 				}
+				rowNumber++;
+				rowCount = rowNumber;
 			}
-			System.out.println();
+			System.out.println(startRow +  " _ " + endRow);
 		} 
 		catch(Exception ex) {
 			System.out.println();
@@ -157,6 +168,19 @@ public class ExcelUtility {
 		lTestData.get(record).replace("Status", "PASS");
 		System.out.println("PASS");
 		System.out.println(lTestData.get(record).get("Status"));
+	}
+	
+	public static void printData() {
+		for(HashMap<String, String> data : lTestData) {
+			System.out.println("");
+			System.out.println("");
+			Set<String> keys =  data.keySet();
+			for(String key : keys) {
+				System.out.print(data.get(key) + "  | ");
+			}
+			System.out.println("");
+			System.out.println("");
+		}
 	}
 	
 }

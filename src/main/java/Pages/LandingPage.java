@@ -1,9 +1,11 @@
-package main.java.Pages;
+package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LandingPage extends main.java.Core.BasePage {
+import Core.BasePage;
+
+public class LandingPage extends BasePage {
 	
 	public LandingPage(WebDriver driver) {
 		super(driver);

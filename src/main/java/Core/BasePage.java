@@ -1,4 +1,4 @@
-package main.java.Core;
+package Core;
 
 import java.util.Random;
 
@@ -36,7 +36,7 @@ public class BasePage {
 		return ele;
 	}
 	
-	protected String getRandomStrinng(int length, String type) throws Exception{
+	protected String getRandomString(int length, String type) throws Exception{
 		String randomString = "";
 		String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		String numeric = "1234567890";

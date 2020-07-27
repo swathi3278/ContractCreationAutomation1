@@ -1,4 +1,4 @@
-package main.java.Pages;
+package Pages;
 
 import java.awt.RenderingHints.Key;
 import java.text.SimpleDateFormat;
@@ -16,15 +16,13 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import main.java.Core.ExcelUtility;
+import Core.BasePage;
+import Core.ExcelUtility;
 
-
-
-	public class CreateContractPage extends main.java.Core.BasePage {
+public class CreateContractPage extends BasePage {
+public int Row = 0; 
 		
-		public int Row = 0; 
-		
-		public CreateContractPage(WebDriver driver) {
+	public CreateContractPage(WebDriver driver) {
 			super(driver);
 	}
 	
@@ -108,44 +106,45 @@ import main.java.Core.ExcelUtility;
 		//String PricebandDropdownoption = "//span[contains(text(),'@@')]";
 		
 		private void selectSegmentOption(String option) throws Exception{
-			System.out.println("selectSegmentOption");
+			System.out.println("selectSegmentOption: " + option);
 	    	getElement(bySegment).click();
 			getElement(By.xpath(SegmentDropdownOption.replace("@@", option))).click();
 	    }
 	    
 	    private void selectCountryOption(String option) throws Exception{
-	    	System.out.println("selectCountryOption");
+	    	System.out.println("selectCountryOption: " + option);
 	    	getElement(byCountry).click();
 			getElement(By.xpath(CountryDropdownOption.replace("@@", option))).click();
 	    }
 	    
 	    private void selectEditionOption(String option) throws Exception{
-	    	System.out.println("selectEditionOption");
+	    	System.out.println("selectEditionOption: " + option);
 	    	getElement(byEdition).click();
 			getElement(By.xpath(EditionDropdownoption.replace("@@", option))).click();
 	    }
 	    
 	    private void selectTypeOption(String option) throws Exception{
-	    	System.out.println("selectTypeOption");
+	    	System.out.println("selectTypeOption: " + option);
 	    	getElement(byType).click();
 			getElement(By.xpath(TypeDropdownoption.replace("@@", option))).click();
 	    }
 	    
 	    private void selectPackageOption(String option) throws Exception{
-	    	System.out.println("selectPackageOption");
+	    	System.out.println("selectPackageOption: " + option);
 	    	getElement(byPackage).click();
 			getElement(By.xpath(PackageDropdownoption.replace("@@", option))).click();
 	    }
 	    
 	    private void selectPriceBand(String option) throws Exception{
-	    	System.out.println("selectPriceBand");
+	    	System.out.println("selectPriceBand : " + option);
 	    	getElement(byPriceband).click();
 	    	Thread.sleep(2);
 			getElement(By.xpath(PricebandDropdownoption.replace("@@", option))).click();
 	    }
 	    
 	    private void setSubscribeNumber(String content) throws Exception{
-	    	System.out.println("setSubscribeNumber");
+	    	System.out.println("setSubscribeNumber: " + content);
+	    	ExcelUtility.updateCell(Row, 11, content);
 	    	getElement(bySubscriberNumber).click();
 			getElement(bySubscriberNumber).sendKeys(content);
 	    }
@@ -153,29 +152,37 @@ import main.java.Core.ExcelUtility;
 	    private void setStartDate(String startDate) throws Exception {
 	    	System.out.println("setStartDate");
 	    	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+	    	
 	    	getElement(byStartDate).click();
-	    	if(startDate != null && startDate != "") {	    		
-				getElement(byStartDate).sendKeys(String.valueOf(sdf.parse(startDate)));
+	    	String date = "";
+	    	if(startDate != null && startDate != "") {	
+	    		date = String.valueOf(sdf.parse(startDate));
 	    	} else {
-	    		getElement(byStartDate).sendKeys(String.valueOf(sdf.format(new Date())));
+	    		date = String.valueOf(sdf.format(new Date()));
 	    	}
+	    	ExcelUtility.updateCell(Row, 17, date);
+	    	getElement(byStartDate).sendKeys(date);
+	    	System.out.println("setStartDate: " + date);
 	    }
 	    
 	    private void setEndDate(String startDate) throws Exception {
 	    	System.out.println("setEndDate");
-	    	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+	    	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");	    	
 	    	getElement(byEndDate).click();
-	    	if(startDate != null && startDate != "") {	    		
-				getElement(byEndDate).sendKeys(String.valueOf(sdf.parse(startDate)));
+	    	String date = "";
+	    	if(startDate != null && startDate != "") {	
+	    		date =String.valueOf(sdf.parse(startDate));				
 	    	} else {
 	    		LocalDate dt = LocalDate.now().plusYears(2);
-	    		String date = dt.getMonth() + "-" + dt.getDayOfMonth()+"-"+dt.getYear();
-	    		getElement(byEndDate).sendKeys(date);
+	    		date = dt.getMonthValue() + "-" + dt.getDayOfMonth()+"-"+dt.getYear();	    		
 	    	}
+	    	ExcelUtility.updateCell(Row, 18, date);
+	    	getElement(byEndDate).sendKeys(date);
+	    	System.out.println("setEndDate: " + date);
 	    }
 	    
 	    private void setFirstName(String content)throws Exception {
-	    	System.out.println("setFirstName");
+	    	System.out.println("setFirstName: " + content);
 	    	getElement(byFirstName).click();
 			getElement(byFirstName).sendKeys(content);
 	    }
@@ -184,14 +191,17 @@ import main.java.Core.ExcelUtility;
 	    	System.out.println("setLastName");
 	    	getElement(byLastName).click();
 			getElement(byLastName).sendKeys(content);
+			System.out.println("setStartDate: " + content);
 	    }
 	    
 	    private void setLoginMail(String content) throws Exception{
 	    	System.out.println("setLoginMail");
-	    	String randomString = getRandomStrinng(3, "NUMERIC");
-	    	String email = content.split("@")[0]+"_"+randomString+"@"+content.split("@")[1];
+	    	String randomString = getRandomString(3, "NUMERIC");
+	    	String email = content.split("@")[0]+"_"+randomString+"@"+content.split("@")[1];	    	
 	    	getElement(byLoginEmail).click();
 			getElement(byLoginEmail).sendKeys(email);
+			ExcelUtility.updateCell(Row, 16, email);
+			System.out.println("setLoginMail: " + email);
 	    }
 	    
 	    private void clickFillWithCompanyAddress() throws Exception{
@@ -238,11 +248,13 @@ import main.java.Core.ExcelUtility;
 	    public void createCoreUser(String content) throws Exception{	
 	    	System.out.println("createCoreUser");
   			selectFundMeter(content);
+  			System.out.println("createCoreUser: " + content);
 		}
 	    
 	    public void createAdvantageUser(String content1, String content2) throws Exception{	
-	    	System.out.println("createAdvantageUser");
+	    	System.out.println("createAdvantageUser: " + content1);
 	    	selectFundMeter(content1);
+	    	System.out.println("createAdvantageUser: " + content2);
   			selectAccountUploadMeter(content2);
 		}
 	    
@@ -252,7 +264,9 @@ import main.java.Core.ExcelUtility;
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.ESCAPE).perform();
 			selectFundMeter(content1);
-  			selectAccountUploadMeter(content2);  			
+			System.out.println("createAdvantageUser: " + content1);
+  			selectAccountUploadMeter(content2);  
+  			System.out.println("createAdvantageUser: " + content2);
 		}
 				
 		public CreateContractPage createContract(String segment, String country, String edition, String subscribernumber, String type, String Startdate,
@@ -409,20 +423,33 @@ import main.java.Core.ExcelUtility;
 			
 		}
 		
-		public CompanyContract createContract(HashMap<String, String> data) throws Exception{				
+		public CompanyContract createContract(HashMap<String, String> data) throws Exception{
+			try {
+				//Row = rowNo;
 				selectSegmentOption(data.get("Segment"));
-				ExcelUtility.updateCell(Row, 11, data.get("Subcriber Number")+getRandomStrinng(6,"NUMERIC"));
+				//ExcelUtility.updateCell(Row, 11, data.get("Subcriber Number")+getRandomString(6,"NUMERIC"));
 				selectCountryOption(data.get("Country"));
 				selectEditionOption(data.get("Edition"));
-				setSubscribeNumber(data.get("Subcriber Number")+getRandomStrinng(6,"NUMERIC"));
+				setSubscribeNumber(data.get("Subcriber Number")+getRandomString(6,"NUMERIC"));
+				
 				selectTypeOption(data.get("Contract Type"));
 				setStartDate(data.get("byStartDate"));
 				setEndDate(data.get("byEndDate"));			
 				selectPackageOption(data.get("Package"));
 				if (data.get("Credit Editions").equals("Core")) {
-					createCoreUser(data.get("Funds Meter"));
+					if (data.get("Package").equals("Global Unlimited")) {
+						//check is it correct
+					}
+					else {
+						createCoreUser(data.get("Funds Meter"));
+					}
 				}
 				else if((data.get("Credit Editions").equals("Advantage"))) {
+					if (data.get("Package").equals("Global Unlimited")) {
+						getElement(byAddmeter).click();
+						driver.findElement(By.xpath("//div[@formarrayname='addOnMeters']/div[1]//input[@formcontrolname='meterValue']")).sendKeys(data.get("Account upload"));
+					}
+					else
 					createAdvantageUser(data.get("Funds Meter"), data.get("Account upload"));
 				}
 				else if((data.get("Credit Editions").equals("Premium"))) {
@@ -434,6 +461,10 @@ import main.java.Core.ExcelUtility;
 				setLoginMail(data.get("Login Email"));	
 				clickFillWithCompanyAddress();
 				clickContractCreateButton();
+			} 
+			catch(Exception ex) {
+			  driver.navigate().refresh();
+			}
 				return new CompanyContract(driver);
 		}	    
 	}

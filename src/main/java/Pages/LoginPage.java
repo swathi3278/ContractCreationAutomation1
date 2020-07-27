@@ -1,9 +1,11 @@
-package main.java.Pages;
+package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LoginPage extends main.java.Core.BasePage{
+import Core.BasePage;
+
+public class LoginPage extends BasePage{
 	
 	public LoginPage(WebDriver driver) {
 		super(driver);

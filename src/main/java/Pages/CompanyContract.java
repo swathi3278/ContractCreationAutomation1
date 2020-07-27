@@ -1,10 +1,12 @@
-package main.java.Pages;
+package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
-public class CompanyContract extends main.java.Core.BasePage {
+import Core.BasePage;
+
+public class CompanyContract extends BasePage {
 
 	// locator
 	static By byBackButton = By.xpath("//button//span[contains(.,'Back')]");
